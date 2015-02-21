@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 path = require 'path'
 
-Hue = require path.resolve()
+Hue = require path.resolve __dirname, '../'
 
 hue = new Hue
 console.log hue
