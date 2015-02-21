@@ -1,0 +1,37 @@
+{
+  "name": "philips-hue",
+  "version": "0.0.1",
+  "description": "Philips Hue bridge API wrapper",
+  "main": "lib/philips-hue.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "bin": {
+    "philips-hue": "./bin/philips-hue.coffee"
+  },
+  "dependencies": {
+    "coffee-script": "^1.9.1",
+    "debug": "^2.1.1",
+    "eventemitter2": "^0.4.14",
+    "optparse": "^1.0.5",
+    "request": "^2.53.0"
+  },
+  "devDependencies": {
+    "coffee-errors": "*",
+    "mocha": "*",
+    "grunt": "*",
+    "grunt-cli": "*",
+    "grunt-simple-mocha": "*",
+    "grunt-notify": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-coffeelint": "*",
+    "grunt-contrib-watch": "*"
+  },
+  "keywords": [
+    "philips",
+    "hue",
+    "light"
+  ],
+  "author": "Sho Hashimoto <hashimoto@shokai.org>",
+  "license": "MIT"
+}
