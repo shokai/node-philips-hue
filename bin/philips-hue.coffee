@@ -29,7 +29,7 @@ parser = new optparse.OptionParser [
   ['--alert [STRING]', '"none" or "lselect"']
   ['--effect [STRING]', '"none" or "colorloop"']
   ['--name [STRING]', 'set light\'s name']
-  ['--conf [FILEPATH]', "set config file path (default:#{conf_file})"]
+  ['--conf [FILEPATH]', "set config file path (default - #{conf_file})"]
 ]
 
 parser.on 'help', ->
