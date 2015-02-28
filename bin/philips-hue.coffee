@@ -17,6 +17,8 @@ print_api_response = (err, res) ->
   return console.error err if err
   console.log res
 
+conf_file = "#{process.env.HOME}/.philips-hue.json"
+
 parser = new optparse.OptionParser [
   ['-h', '--help', 'show help']
   ['--lights', 'show lights state']
@@ -27,6 +29,7 @@ parser = new optparse.OptionParser [
   ['--alert [STRING]', '"none" or "lselect"']
   ['--effect [STRING]', '"none" or "colorloop"']
   ['--name [STRING]', 'set light\'s name']
+  ['--conf [FILEPATH]', "set config file path (default:#{conf_file})"]
 ]
 
 parser.on 'help', ->
@@ -47,11 +50,15 @@ parser.on 'help', ->
   console.log parser.toString()
   return process.exit 0
 
+parser.on 'conf', (opt, value) ->
+  conf_file = value
+
 parser.on 'lights', ->
-  hue.lights (err, lights) ->
-    return console.error err if err
-    for i, data of lights
-      console.log "[#{i}] #{data.name}\t#{JSON.stringify data.state}"
+  hue.on 'ready', ->
+    hue.lights (err, lights) ->
+      return console.error err if err
+      for i, data of lights
+        console.log "[#{i}] #{data.name}\t#{JSON.stringify data.state}"
 
 parser.on 'light', (opt, light) ->
   option.light = light
@@ -69,11 +76,11 @@ for i in ['name']
       option.info[i] = value
 
 read_config_or_create = (callback = ->) ->
-  conf_file = "#{process.env.HOME}/.philips-hue.json"
   fs.exists conf_file, (exists) ->
     if exists
-      conf = require conf_file
-      return callback null, conf
+      fs.readFile conf_file, (err, data) ->
+        callback err, JSON.parse data.toString()
+      return
     hue.getBridges (err, bridges) ->
       return callback err if err
       console.log "found bridges: #{JSON.stringify bridges}"
@@ -87,15 +94,18 @@ read_config_or_create = (callback = ->) ->
           return callback err if err
           callback null, conf
 
+if process.argv.length < 3
+  parser.on_switches.help.call()
+parser.parse process.argv
+
 read_config_or_create (err, conf) ->
   return console.error err if err
   hue.bridge   = conf.bridge
   hue.username = conf.username
   debug hue
+  hue.emit 'ready'
 
-  if process.argv.length < 3
-    parser.on_switches.help.call()
-  parser.parse process.argv
+hue.once 'ready', ->
 
   switch process.argv[2]
     when 'on'
@@ -113,9 +123,8 @@ read_config_or_create (err, conf) ->
       return
     return hue.light(option.light).setInfo option.info, print_api_response
   if Object.keys(option.state).length > 0
-    unless option.state.on?
+    if option.state.hue?
       option.state.effect ||= 'none'
-      option.state.alert  ||= 'none'
     if typeof option.light is 'number'
       hue.light(option.light).setState option.state, print_api_response
       return

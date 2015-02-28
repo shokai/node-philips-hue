@@ -1,14 +1,14 @@
 ## node modules
+events = require 'events'
 fs     = require 'fs'
 crypto = require 'crypto'
 
 ## npm libs
 request = require 'request'
-events  = require 'eventemitter2'
 debug   = require('debug')('philips-hue')
 
 
-module.exports = class PhilipsHue extends events.EventEmitter2
+module.exports = class PhilipsHue extends events.EventEmitter
 
   constructor: ->
     @devicetype = 'node-philips-hue'

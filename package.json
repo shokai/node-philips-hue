@@ -12,7 +12,6 @@
   "dependencies": {
     "coffee-script": "^1.9.1",
     "debug": "^2.1.1",
-    "eventemitter2": "^0.4.14",
     "optparse": "^1.0.5",
     "request": "^2.53.0"
   },
