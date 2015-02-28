@@ -2,6 +2,7 @@
   "name": "philips-hue",
   "version": "0.0.1",
   "description": "Philips Hue bridge API wrapper",
+  "private": false,
   "main": "lib/philips-hue.js",
   "scripts": {
     "test": "grunt test"
