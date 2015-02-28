@@ -1,4 +1,4 @@
-# Philips Hue [WIP]
+# Philips Hue
 
 Node.js library for [Philips Hue bridge API](http://www.developers.meethue.com/philips-hue-api)
 
