@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+- '0.10'
+script: npm run build
+notifications:
+  slack:
+    secure: JnxaKiQKMo2c36/8ETqwpEtcU/YHPQCxxYM+JovrojC8W8CaGCL/i1j/G1BprUh8JKzB/nxdCqSc8+bX6dSBtmkm9FfxhH9tpnujoULvfIacShT8YQYDreZqt+/XbEtrbyrqhP40oEAuBuUAjQCgWOEpky0ieWvoqQw8cWYYOls=

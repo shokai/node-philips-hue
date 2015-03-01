@@ -5,7 +5,8 @@
   "private": false,
   "main": "lib/philips-hue.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "build": "grunt build"
   },
   "bin": {
     "philips-hue": "./bin/philips-hue.coffee"

@@ -16,6 +16,8 @@ module.exports = (grunt) ->
 
   grunt.initConfig
 
+    pkg: grunt.file.readJSON 'package.json'
+
     coffeelint:
       options:
         max_line_length:
