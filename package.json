@@ -1,6 +1,6 @@
 {
   "name": "philips-hue",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Philips Hue bridge API wrapper",
   "private": false,
   "main": "lib/philips-hue.js",

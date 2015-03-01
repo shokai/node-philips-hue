@@ -1,3 +1,7 @@
+=== 0.1.0 2015-03-01
+
+* add method hue.loadConfigFile(path, callback)
+
 === 0.0.2 2015-03-01
 
 * fix README
