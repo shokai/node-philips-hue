@@ -75,33 +75,12 @@ for i in ['name']
       debug "#{i} <= #{value}"
       option.info[i] = value
 
-read_config_or_create = (callback = ->) ->
-  fs.exists conf_file, (exists) ->
-    if exists
-      fs.readFile conf_file, (err, data) ->
-        callback err, JSON.parse data.toString()
-      return
-    hue.getBridges (err, bridges) ->
-      return callback err if err
-      console.log "found bridges: #{JSON.stringify bridges}"
-      bridge = bridges[0]
-      unless /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test bridge
-        return callback "invalid bridge address \"#{bridge}\""
-      hue.auth bridge, (err, username) ->
-        return callback err if err
-        conf = {bridge: bridge, username: username}
-        fs.writeFile conf_file, JSON.stringify(conf), (err) ->
-          return callback err if err
-          callback null, conf
-
 if process.argv.length < 3
   parser.on_switches.help.call()
 parser.parse process.argv
 
-read_config_or_create (err, conf) ->
+hue.loadConfigFile conf_file, (err, conf) ->
   return console.error err if err
-  hue.bridge   = conf.bridge
-  hue.username = conf.username
   debug hue
   hue.emit 'ready'
 

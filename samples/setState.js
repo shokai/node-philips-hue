@@ -5,18 +5,10 @@ var path = require('path')
 var Hue = require(path.resolve(__dirname, '../'));
 
 var hue = new Hue
+var conf_file = process.env.HOME+'/.philips-hue.json';
 
-if(process.argv.length < 3){
-  console.error("error: username required");
-  console.error("node "+process.argv[1]+" a1b2cdef3456");
-  process.exit(1);
-}
-
-hue.username = process.argv[2];
-
-hue.getBridges(function(err, bridges){
-
-  hue.bridge = bridges[0];
+hue.loadConfigFile(conf_file, function(err, conf){
+  if(err) return console.error(err);
 
   for(var i = 1; i <= 3; i++){
     var state = {

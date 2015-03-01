@@ -15,11 +15,38 @@ module.exports = class PhilipsHue extends events.EventEmitter
     @bridge = null
     @username = null
 
+  loadConfigFile: (conf_file, callback = ->) ->
+    debug "loadConfigFile #{conf_file}"
+    fs.exists conf_file, (exists) =>
+      if exists
+        fs.readFile conf_file, (err, data) =>
+          conf = JSON.parse data.toString()
+          @bridge = conf.bridge
+          @username = conf.username
+          @devicetype = conf.devicetype
+          return callback null, conf
+        return
+      debug "generate config file"
+      @getBridges (err, bridges) =>
+        return callback err if err
+        debug "found bridges: #{JSON.stringify bridges}"
+        bridge = bridges[0]
+        unless /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test bridge
+          return callback "invalid bridge address \"#{bridge}\""
+        @auth bridge, (err, username) =>
+          return callback err if err
+          @bridge = bridge
+          @username = username
+          conf = {bridge: bridge, username: username, devicetype: @devicetype}
+          fs.writeFile conf_file, JSON.stringify(conf), (err) =>
+            return callback err if err
+            callback null, conf
+
+
   generateUserName: ->
     crypto.createHash('md5')
     .update "#{@devicetype} #{process.env.USER} #{Date.now()}"
     .digest 'hex'
-
 
   getBridges: (callback = ->) ->
     debug 'getBridges'

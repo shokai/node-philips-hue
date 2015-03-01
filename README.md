@@ -49,6 +49,8 @@ hue.getBridges(function(err, bridges){
 });
 ```
 
+set bridge's address and username
+
 ```javascript
 hue.bridge = "192.168.0.101";  // from hue.getBridges()
 hue.username = "a1b2cdef3456"; // from hue.auth()
@@ -109,6 +111,18 @@ light.setInfo({name: "myroom"}, function(err, res){
 light.getInfo(function(err, res){
   if(err) return console.log(err);
   console.log(res);
+});
+```
+
+### Helper Method
+
+load (or auth then create) config file.
+
+```javascript
+var conf_file = process.env.HOME + '/.hue.json';
+hue.loadConfigFile(conf_file, function(err, conf){
+  hue.light(1).on();
+  hue.light(2).off();
 });
 ```
 
