@@ -78,3 +78,11 @@ describe 'Instance of Hue class', ->
 
     it 'should have method "off"', ->
       assert.equal typeof light.off, 'function'
+
+    it 'should blink', (done) ->
+      @timeout 5000
+      light.off (err, res) ->
+        setTimeout ->
+          light.on (err, res) ->
+            done()
+        , 1000
