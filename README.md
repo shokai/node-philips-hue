@@ -140,6 +140,16 @@ hue.loadConfigFile(conf_file, function(err, conf){
 
     % npm test
 
+## Troubleshooting
+If you get an error like
+```bash
+env: coffee: No such file or directory
+```
+you need one more dependency, _Coffee script_
+```bash
+npm install -g coffee-script
+```
+
 
 ## Contributing
 
