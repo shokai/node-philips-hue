@@ -131,9 +131,9 @@ hue.loadConfigFile(conf_file, function(err, conf){
 
 ## Develop
 
-1. `git clone` this repository
-2. `npm install` and `npm install grunt -g`
-3. run `grunt`
+    % npm run build
+    # or
+    % npm run watch
 
 
 ## Test

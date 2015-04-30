@@ -6,7 +6,8 @@
   "main": "lib/philips-hue.js",
   "scripts": {
     "test": "grunt test",
-    "build": "grunt build"
+    "build": "grunt build",
+    "watch": "grunt"
   },
   "bin": {
     "philips-hue": "./bin/philips-hue.coffee"
