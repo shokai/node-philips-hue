@@ -14,7 +14,7 @@ Node.js library for [Philips Hue bridge API](http://www.developers.meethue.com/p
 
 ## philips-hue command
 
-    % npm install philips-hue -g  # global install
+    % npm install philips-hue coffee-script -g  # global install
     % philips-hue --help
 
     % philips-hue --lights
@@ -140,15 +140,6 @@ hue.loadConfigFile(conf_file, function(err, conf){
 
     % npm test
 
-## Troubleshooting
-If you get an error like
-```bash
-env: coffee: No such file or directory
-```
-you need one more dependency, _Coffee script_
-```bash
-npm install -g coffee-script
-```
 
 
 ## Contributing

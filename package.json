@@ -12,12 +12,12 @@
     "philips-hue": "./bin/philips-hue.coffee"
   },
   "dependencies": {
-    "coffee-script": "^1.9.1",
-    "debug": "^2.1.1",
-    "optparse": "^1.0.5",
-    "request": "^2.53.0"
+    "debug": "*",
+    "optparse": "*",
+    "request": "*"
   },
   "devDependencies": {
+    "coffee-script": "^1.9",
     "coffee-errors": "*",
     "mocha": "*",
     "grunt": "*",
