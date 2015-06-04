@@ -35,7 +35,7 @@ describe 'Instance of Hue class', ->
 
   describe 'method "getBridges"', ->
 
-    it 'should callback list of Address', (done) ->
+    it 'should callback list of Bridges', (done) ->
       @timeout 5000
       hue.getBridges (err, bridges) ->
         console.error err if err

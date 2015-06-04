@@ -11,7 +11,7 @@ hue.getBridges(function(err, bridges){
   if(err) return console.error(err);
   console.log(bridges);
 
-  var bridge = bridges[0];
+  var bridge = bridges[0].internalipaddress;
   console.log("bridge: "+bridge);
 
   hue.auth(bridge, function(err, username){

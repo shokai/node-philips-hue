@@ -30,7 +30,7 @@ module.exports = class PhilipsHue extends events.EventEmitter
       @getBridges (err, bridges) =>
         return callback err if err
         debug "found bridges: #{JSON.stringify bridges}"
-        bridge = bridges[0]
+        bridge = bridges[0].internalipaddress
         unless /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test bridge
           return callback "invalid bridge address \"#{bridge}\""
         @auth bridge, (err, username) =>
@@ -55,7 +55,9 @@ module.exports = class PhilipsHue extends events.EventEmitter
       return callback "statusCode:#{res.statusCode}" if res.statusCode isnt 200
       try
         arr = JSON.parse body
-        callback null, arr.map (i) -> i.internalipaddress
+        debug JSON.stringify arr
+        throw new Exception 'response type error' unless arr instanceof Array
+        callback null, arr
       catch err
         callback err
 
