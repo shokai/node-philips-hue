@@ -40,10 +40,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shokai/node-philips-hue.git"
+    "url": "git+https://github.com/shokai/node-philips-hue.git"
   },
   "bugs": {
     "url": "https://github.com/shokai/node-philips-hue/issues"
   },
-  "homepage": "https://github.com/shokai/node-philips-hue"
+  "homepage": "https://github.com/shokai/node-philips-hue",
+  "directories": {
+    "test": "test"
+  }
 }
