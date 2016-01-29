@@ -14,7 +14,7 @@ Node.js library for [Philips Hue bridge API](http://www.developers.meethue.com/p
 
 ## philips-hue command
 
-    % npm install philips-hue coffee-script -g  # global install
+    % npm install philips-hue -g  # global install
     % philips-hue --help
 
     % philips-hue --lights
