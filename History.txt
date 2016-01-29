@@ -1,3 +1,7 @@
+=== 0.2.0 2016-01-30
+
+* rewrite coffee-script -> ES6(babel)
+
 === 0.1.2 2015-05-01
 
 * moved coffee-script into devDependencies
