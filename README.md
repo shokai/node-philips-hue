@@ -2,10 +2,11 @@
 
 Node.js library for [Philips Hue bridge API](http://www.developers.meethue.com/philips-hue-api)
 
-[![Build Status](https://travis-ci.org/shokai/node-philips-hue.svg?branch=master)](https://travis-ci.org/shokai/node-philips-hue)
-
 - https://github.com/shokai/node-philips-hue
-- http://npmjs.org/package/philips-hue
+- https://npmjs.com/package/philips-hue
+
+[![Circle CI](https://circleci.com/gh/shokai/node-philips-hue.svg?style=svg)](https://circleci.com/gh/shokai/node-philips-hue)
+
 
 ## Install
 
