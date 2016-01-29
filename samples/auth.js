@@ -1,8 +1,7 @@
 'use strict';
-var path = require('path')
 
 // var Hue = require('philips-hue');
-var Hue = require(path.resolve(__dirname, '../'));
+var Hue = require('../');
 
 var hue = new Hue
 hue.devicetype = 'my-hue-app'

@@ -1,8 +1,7 @@
 'use strict';
-var path = require('path')
 
 // var Hue = require('philips-hue');
-var Hue = require(path.resolve(__dirname, '../'));
+var Hue = require('../');
 
 var hue = new Hue
 var conf_file = process.env.HOME+'/.philips-hue.json';
