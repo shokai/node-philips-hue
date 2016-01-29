@@ -1,6 +1,5 @@
 "use strict";
 
-import fs from "fs";
 import optparse from "optparse";
 import pkg from "../package.json";
 
