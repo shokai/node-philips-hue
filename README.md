@@ -38,34 +38,67 @@ var hue = new Hue();
 ### Get Bridge's address and Auth
 
 ```javascript
-hue.getBridges(function(err, bridges){
-  if(err) return console.error(err);
-  console.log(bridges);
-
-  var bridge = bridges[0]; // use 1st bridge
-
-  hue.auth(bridge, function(err, username){
-    if(err) return console.error(err);
+hue.getBridges()
+  .then(function(bridges){
+    console.log(bridges);
+    var bridge = bridges[0]; // use 1st bridge
     console.log("bridge: "+bridge);
+    return hue.auth(bridge);
+  })
+  .then(function(username){
     console.log("username: "+username);
+
+    // controll Hue lights
+    hue.light(1).on();
+    hue.light(2).off();
+    hue.light(3).setState({hue: 50000, sat: 200, bri: 90});
+  })
+  .catch(function(err){
+    console.error(err.stack || err);
   });
-});
 ```
 
-set bridge's address and username
+`username` is required for the next login.
 
 ```javascript
-hue.bridge = "192.168.0.101";  // from hue.getBridges()
-hue.username = "a1b2cdef3456"; // from hue.auth()
+var hue = new Hue;
+hue.bridge = "192.168.0.101";  // from hue.getBridges
+hue.username = "a1b2cdef3456"; // from hue.auth
+hue.light(1).on();
 ```
 
-### lights
+### Login
+
+`hue.login` is useful wrapper of `getBridges` and `auth`. It automatically store/restore `username` and `bridge` address.
 
 ```javascript
-hue.lights(function(err, lights){
-  if(err) return console.log(err);
-  console.log(lights);
-});
+var hue = new Hue;
+var conf_file = process.env.HOME+'/.philips-hue.json';
+
+hue
+  .login(conf_file)
+  .then(function(conf){
+    return hue.light(1).on();
+  })
+  .then(function(res){
+    console.log(res);
+  })
+  .catch(function(err){
+    console.error(err.stack || err);
+  });
+```
+
+### getLights
+
+```javascript
+hue.getLights()
+  .then(lights){
+    console.log(lights);
+    console.log(Object.keys(lights) + " lights found!");
+  })
+  .catch(function(err){
+    console.error(err.stack || err);
+  });
 ```
 
 ### on / off
@@ -73,17 +106,11 @@ hue.lights(function(err, lights){
 ```javascript
 var light = hue.light(1);
 
-light.on(function(err, res){
-  if(err) return console.log(err);
-  console.log(res);
-});
+light.on().then(console.log).catch(console.error);
 ```
 
 ```javascript
-hue.light(2).off(function(err, res){
-  if(err) return console.log(err);
-  console.log(res);
-});
+hue.light(2).on().then(console.log).catch(console.error);
 ```
 
 ### setState
@@ -91,10 +118,7 @@ hue.light(2).off(function(err, res){
 ```javascript
 var state = {bri: 200, sat: 120, hue: 50000};
 
-hue.light(1).setState(state, function(err, res){
-  if(err) return console.log(err);
-  console.log(res);
-});
+hue.light(1).setState(state).then(console.log).catch(console.error);
 
 hue.light(2).setState({effect: "colorloop"});
 
@@ -106,27 +130,12 @@ hue.light(3).setState({alert: "lselect"});
 ```javascript
 var light = hue.light(1);
 
-light.setInfo({name: "myroom"}, function(err, res){
-  if(err) return console.log(err);
-  console.log(res);
-})
+light.setInfo({name: "myroom"});
 
-light.getInfo(function(err, res){
-  if(err) return console.log(err);
-  console.log(res);
-});
-```
-
-### Helper Method
-
-load (or auth then create) config file.
-
-```javascript
-var conf_file = process.env.HOME + '/.hue.json';
-hue.loadConfigFile(conf_file, function(err, conf){
-  hue.light(1).on();
-  hue.light(2).off();
-});
+light.getInfo()
+  .then(function(info){
+    console.log(info);
+  });function(err, res){
 ```
 
 
@@ -140,13 +149,3 @@ hue.loadConfigFile(conf_file, function(err, conf){
 ## Test
 
     % npm test
-
-
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request

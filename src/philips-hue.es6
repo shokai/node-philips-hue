@@ -3,8 +3,7 @@
 import events from "events";
 import fs from "fs";
 import crypto from "crypto";
-
-import request from "request";
+import axios from "axios";
 import Light from "./light";
 const debug = require("debug")("philips-hue");
 
@@ -17,39 +16,38 @@ module.exports = class PhilipsHue extends events.EventEmitter{
     this.username = null;
   }
 
-  loadConfigFile(conf_file, callback){
-    debug(`loadConfigFile ${conf_file}`);
-    fs.exists(conf_file, (exists) => {
-      if(exists){
-        fs.readFile(conf_file, (err, data) => {
-          var conf = JSON.parse(data.toString());
-          this.bridge = conf.bridge;
-          this.username = conf.username;
-          this.devicetype = conf.devicetype;
-          return callback(null, conf);
-        });
-        return;
+  login(confFile){
+    if(typeof confFile !== "string") return Promise.reject("Argument Error: config file is missing");
+    debug(`login file: ${confFile}`);
+    try{
+      if(fs.statSync(confFile).isFile()){
+        var conf = require(confFile);
+        this.bridge = conf.bridge;
+        this.username = conf.username;
+        this.devicetype = conf.devicetype;
+        return Promise.resolve(conf);
       }
-      debug("generate config file");
-      this.getBridges((err, bridges) => {
-        if(err) return callback(err);
+    }
+    catch(err){
+      debug("config file not exists");
+    }
+    debug(`generate config file ${confFile}`);
+    return this
+      .getBridges()
+      .then((bridges) => {
         debug(`found bridges: ${JSON.stringify(bridges)}`);
-        var bridge = bridges[0];
-        if(!(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(bridge))){
-          return callback(`invalid bridge address "${bridge}"`);
+        this.bridge = bridges[0];
+        if(!(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(this.bridge))){
+          throw `invalid bridge address "${this.bridge}"`;
         }
-        this.auth(bridge, (err, username) => {
-          if(err) return callback(err);
-          this.bridge = bridge;
-          this.username = username;
-          var conf = {bridge: bridge, username: username, devicetype: this.devicetype};
-          fs.writeFile(conf_file, JSON.stringify(conf), (err) => {
-            if(err) return callback(err);
-          });
-          callback(null, conf);
-        });
+        return this.auth(this.bridge);
+      })
+      .then((username) => {
+        this.username = username;
+        var conf = {bridge: this.bridge, username: username, devicetype: this.devicetype};
+        fs.writeFileSync(confFile, JSON.stringify(conf));
+        return conf;
       });
-    });
   }
 
   generateUserName(){
@@ -59,55 +57,39 @@ module.exports = class PhilipsHue extends events.EventEmitter{
       .digest("hex");
   }
 
-  getBridges(callback){
+  getBridges(){
     debug("getBridges");
-    request.get("https://www.meethue.com/api/nupnp", (err, res, body) => {
-      if(err) return callback(err);
-      if(res.statusCode !== 200) return callback(`statusCode:${res.statusCode}`);
-      try{
-        var arr = JSON.parse(body);
-        callback(null, arr.map((i) => i.internalipaddress));
-      }
-      catch(err){
-        callback(err);
-      }
-    });
+    return axios
+      .get("https://www.meethue.com/api/nupnp")
+      .then((res) => {
+        return res.data.map((i) => {return i.internalipaddress});
+      });
   }
 
-  auth(bridge, callback){
-    debug(`auth bridge:${bridge}`);
+  auth(bridge){
+    debug(`auth bridge: ${bridge}`);
     var username = this.generateUserName();
-    request.post({
+    console.log(username);
+    return axios({
+      method: "post",
       url: `http://${bridge}/api`,
-      form: JSON.stringify({
+      data: JSON.stringify({
         devicetype: this.devicetype,
         username: username
       })
-    }, (err, res, body) => {
-      if(err) return callback(err);
-      if(res.statusCode !== 200) return callback(`statusCode:${res.statusCode}`);
-      try{
-        var data = JSON.parse(body);
-        if(data[0].error) return callback(data[0].error);
-        callback(null, username);
-      }
-      catch(err){
-        callback(err);
-      }
+    }).then((res) => {
+      debug(res.data);
+      if(res.data[0].error) throw res.data[0].error;
+      return username;
     });
   }
 
-  lights(callback){
-    request.get(`http://${this.bridge}/api/${this.username}/lights`, (err, res, body) => {
-      if(err) return callback(err);
-      if(res.statusCode !== 200) return callback(`statusCode:${res.statusCode}`);
-      try{
-        callback(null, JSON.parse(body));
-      }
-      catch(err){
-        callback(err);
-      }
-    });
+  getLights(){
+    return axios
+      .get(`http://${this.bridge}/api/${this.username}/lights`)
+      .then((res) => {
+        return res.data;
+      });
   }
 
   light(num){

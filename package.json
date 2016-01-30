@@ -6,7 +6,7 @@
   "main": "lib/philips-hue.js",
   "scripts": {
     "mocha": "mocha test/test_*.es6 --compilers js:babel-register",
-    "eslint": "eslint *.es6 src/*.es6 test/*.es6",
+    "eslint": "eslint *.es6 src/*.es6 test/*.es6 samples/*.js",
     "test": "npm run eslint && npm run mocha",
     "build": "babel src/ --out-dir lib/ --source-maps inline",
     "watch": "parallelshell 'npm run build -- --watch' 'chokidar \"(src|test)/*.es6\" -c \"npm test\"'"
@@ -15,9 +15,9 @@
     "philips-hue": "./bin/cli.js"
   },
   "dependencies": {
+    "axios": "^0.9.1",
     "debug": "*",
-    "optparse": "*",
-    "request": "*"
+    "optparse": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.4.5",

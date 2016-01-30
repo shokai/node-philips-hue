@@ -3,22 +3,28 @@
 // var Hue = require('philips-hue');
 var Hue = require('../');
 
-var hue = new Hue
+var hue = new Hue;
 var conf_file = process.env.HOME+'/.philips-hue.json';
 
-hue.loadConfigFile(conf_file, function(err, conf){
-  if(err) return console.error(err);
+hue
+  .login(conf_file)
+  .then(function(conf){
+    return Promise.all(
+      [1, 2, 3].map(function(i){
+        var state = {
+          on: true,
+          bri: Math.floor(Math.random()*255),
+          hue: Math.floor(Math.random()*65535),
+          sat: Math.floor(Math.random()*255)
+        };
+        console.log(state);
+        return hue.light(i).setState(state).then(console.log);
+      })
+    );
+  })
+  .catch(function(err){
+    console.error(err.stack || err);
+  });
 
-  for(var i = 1; i <= 3; i++){
-    var state = {
-      bri: Math.floor(Math.random()*255),
-      hue: Math.floor(Math.random()*65535),
-      sat: Math.floor(Math.random()*255)
-    };
-    console.log(state);
-    hue.light(i).setState(state, function(err, res){
-      if(err) console.error(err);
-      console.log(res);
-    });
-  }
-});
+
+

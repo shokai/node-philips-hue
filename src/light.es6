@@ -1,6 +1,6 @@
 "use strict";
 
-import request from "request";
+import axios from "axios";
 const debug = require("debug")("philips-hue:light");
 
 module.exports = class Light{
@@ -10,62 +10,44 @@ module.exports = class Light{
     this.hue = hue;
   }
 
-  getInfo(callback){
+  getInfo(){
     const url = `http://${this.hue.bridge}/api/${this.hue.username}/lights/${this.number}`;
     debug(`getInfo ${url}`);
-    request.get(url, (err, res, body) => {
-      if(err) return callback(err);
-      if(res.statusCode !== 200) return callback(`statusCode:${res.statusCode}`);
-      try{
-        callback(null, JSON.parse(body));
-      }
-      catch(err){
-        callback(err);
-      }
-    });
+    return axios.get(url)
+      .then((res) => {
+        return res.data;
+      });
   }
 
-  setInfo(put_data, callback){
+  setInfo(put_data){
     const url = `http://${this.hue.bridge}/api/${this.hue.username}/lights/${this.number}`;
     debug(`setInfo ${url} ${JSON.stringify(put_data)}`);
-    request.put({
+    return axios({
+      method: "put",
       url: url,
-      form: JSON.stringify(put_data)
-    }, (err, res, body) => {
-      if(err) return callback(err);
-      if(res.statusCode !== 200) return callback(`statusCode:${res.statusCode}`);
-      try{
-        callback(null, JSON.parse(body));
-      }
-      catch(err){
-        callback(err);
-      }
+      data: JSON.stringify(put_data)
+    }).then((res) => {
+      return res.data;
     });
   }
 
-  setState(put_data, callback){
+  setState(put_data){
     const url = `http://${this.hue.bridge}/api/${this.hue.username}/lights/${this.number}/state`;
     debug(`setState ${url} ${JSON.stringify(put_data)}`);
-    request.put({
+    return axios({
+      method: 'put',
       url: url,
-      form: JSON.stringify(put_data)
-    }, (err, res, body) => {
-      if(err) return callback(err);
-      if(res.statusCode !== 200) return callback(`statusCode:${res.statusCode}`);
-      try{
-        callback(null, JSON.parse(body));
-      }
-      catch(err){
-        callback(err);
-      }
+      data: JSON.stringify(put_data)
+    }).then((res) => {
+      return res.data;
     });
   }
 
-  on(callback){
-    this.setState({on: true}, callback);
+  on(){
+    return this.setState({on: true});
   }
 
-  off(callback){
-    this.setState({on: false}, callback);
+  off(){
+    return this.setState({on: false});
   }
 }

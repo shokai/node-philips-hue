@@ -2,25 +2,22 @@
 
 "use strict";
 
-process.env.NODE_ENV = 'test';
-
+import "./test_helper";
 import {assert} from "chai";
 import Hue from "../src/philips-hue";
 const hue = new Hue;
 
-describe('loading config file', function(){
+describe('method "login"', function(){
 
-  it('should have method "loadConfigFile"', function(){
-    assert.isFunction(hue.loadConfigFile);
-  });
-
-  it('should load config file', function(done){
-    hue.loadConfigFile(`${process.env.HOME}/.philips-hue.json`, function(err, conf){
-      assert.match(conf.bridge, /^\d+\.\d+\.\d+\.\d+$/);
-      assert.isString(conf.username);
-      assert.isString(conf.devicetype);
-      done()
-    });
+  it('should load config file', function(){
+    assert.isFunction(hue.login);
+    return hue
+      .login(`${process.env.HOME}/.philips-hue.json`)
+      .then((conf) => {
+        assert.match(conf.bridge, /^\d+\.\d+\.\d+\.\d+$/);
+        assert.isString(conf.username);
+        assert.isString(conf.devicetype);
+      });
   });
 });
 
@@ -44,31 +41,32 @@ describe('Instance of Hue class', function(){
 
   describe('method "getBridges"', function(){
 
-    it('should callback list of Address', function(done){
-      this.timeout(5000);
-      hue.getBridges((err, bridges) => {
-        assert.isArray(bridges);
-        done()
-      });
+    it('should return list of Address', function(){
+      return hue
+        .getBridges()
+        .then((bridges) => {
+          assert.isArray(bridges);
+        });
     });
+
   });
 
   it('should have method "auth"', function(){
     assert.isFunction(hue.auth);
   });
 
-  it('should have method "lights"', function(){
-    assert.isFunction(hue.lights);
+  it('should have method "getLights"', function(){
+    assert.isFunction(hue.getLights);
   });
 
-  describe('method "lights"', function(){
+  describe('method "getLights"', function(){
 
-    it('should callback status list of lights', function(done){
-      this.timeout(5000);
-      hue.lights((err, lights) => {
-        assert.isObject(lights);
-        done()
-      });
+    it('should return status list of lights', function(){
+      return hue
+        .getLights()
+        .then((lights) => {
+          assert.isObject(lights);
+        });
     });
   });
 
@@ -84,6 +82,18 @@ describe('Instance of Hue class', function(){
       assert.isFunction(light.getInfo);
     });
 
+    describe('method "getInfo"', function(){
+
+      it("should return info", function(){
+        return light.getInfo().then((info) => {
+          assert.isString(info.name);
+          assert.isObject(info.state);
+          assert.isString(info.type);
+        });
+      });
+    });
+
+
     it('should have method "setInfo"', function(){
       assert.isFunction(light.setInfo);
     });
@@ -92,23 +102,24 @@ describe('Instance of Hue class', function(){
       assert.isFunction(light.setState);
     });
 
-    it('should have method "on"', function(){
-      assert.isFunction(light.on);
-    });
-
     it('should have method "off"', function(){
       assert.isFunction(light.off);
     });
 
-    it('should blink', function(done){
-      this.timeout(5000);
-      light.off((err, res) => {
-        setTimeout(() => {
-          light.on((err, res) => {
-            done()
-          });
-        }, 1000);
-      });
+    it('should have method "on"', function(){
+      assert.isFunction(light.on);
+    });
+
+    it('should blink', function(){
+      this.timeout(4000);
+      return light
+        .off()
+        .then(() => {
+          return Promise.delay(2000);
+        })
+        .then(() => {
+          return light.on();
+        });
     });
   });
 

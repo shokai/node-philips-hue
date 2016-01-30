@@ -14,13 +14,8 @@ var option = {
 import Hue from "../";
 const hue = new Hue;
 
-function print_api_response(err, res){
-  if(err) return console.error(err);
-  console.log(res);
-}
-
 module.exports.handler = function(argv){
-  var conf_file = `${process.env.HOME}/.philips-hue.json`;
+  var confFile = `${process.env.HOME}/.philips-hue.json`;
 
   const parser = new optparse.OptionParser([
     ['-h', '--help', 'show help'],
@@ -32,7 +27,7 @@ module.exports.handler = function(argv){
     ['--alert [STRING]', '"none" or "lselect"'],
     ['--effect [STRING]', '"none" or "colorloop"'],
     ['--name [STRING]', 'set light\'s name'],
-    ['--conf [FILEPATH]', `set config file path (default - ${conf_file})`]
+    ['--conf [FILEPATH]', `set config file path (default - ${confFile})`]
   ]);
 
   parser.on('help', function(){
@@ -55,18 +50,21 @@ Usage:
 
 
   parser.on('conf', (opt, value) => {
-    conf_file = value
+    confFile = value
   });
 
   parser.on('lights', () => {
     hue.on('ready', () => {
-      hue.lights((err, lights) => {
-        if(err) return console.error(err);
-        for(let i in lights){
-          let data = lights[i];
-          console.log(`[${i}] ${data.name}\t${JSON.stringify(data.state)}`);
-        }
-      });
+      hue.lights()
+        .then((lights) => {
+          for(let i in lights){
+            let data = lights[i];
+            console.log(`[${i}] ${data.name}\t${JSON.stringify(data.state)}`);
+          }
+        })
+        .catch(function(err){
+          console.error(err.stack || err);
+        });
     });
   });
 
@@ -93,11 +91,11 @@ Usage:
   }
   parser.parse(argv);
 
-  hue.loadConfigFile(conf_file, (err, conf) => {
-    if(err) return console.error(err);
-    debug(hue);
-    hue.emit('ready');
-  });
+  hue.login(confFile)
+    .then((conf) => {
+      debug(hue);
+      hue.emit('ready');
+    });
 
   hue.once('ready', () => {
 
@@ -114,27 +112,29 @@ Usage:
     if(Object.keys(option.state).length < 1 &&
        Object.keys(option.info).length < 1 &&
        option.light){
-      return hue.light(option.light).getInfo(print_api_response);
+      return hue.light(option.light).getInfo().then(console.log).catch(console.error);
     }
     if(Object.keys(option.info).length > 0){
       if(typeof option.light !== 'number'){
         return console.error('option "--light" is required');
       }
-      return hue.light(option.light).setInfo(option.info, print_api_response);
+      return hue.light(option.light).setInfo(option.info).then(console.log).catch(console.error);
     }
     if(Object.keys(option.state).length > 0){
       if(option.state.hue && !option.state.effect){
         option.state.effect = 'none';
       }
       if(typeof option.light === 'number'){
-        return hue.light(option.light).setState(option.state, print_api_response);
+        return hue.light(option.light).setState(option.state).then(console.log).catch(console.error);
       }
-      hue.lights((err, lights) => {
-        for(let number in lights){
-          hue.light(number).setState(option.state, print_api_response);
-        }
-        return
-      });
+      hue
+        .getLights()
+        .then((lights) => {
+          for(let number in lights){
+            hue.light(number).setState(option.state).then(console.log).catch(console.error);
+          }
+        });
+      return
     }
   });
 };
