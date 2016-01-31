@@ -1,3 +1,10 @@
+=== 1.0.0 2016-01-31
+
+* switched from callback interface to Promise
+* renamed functions
+ - "loadConfigFile" -> "login"
+ - "lights" -> "getLights"
+
 === 0.2.0 2016-01-30
 
 * rewrite coffee-script -> ES6(babel)
