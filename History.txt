@@ -1,3 +1,7 @@
+=== 1.0.1 2016-01-31
+
+* bugfixed CLI
+
 === 1.0.0 2016-01-31
 
 * switched from callback interface to Promise
