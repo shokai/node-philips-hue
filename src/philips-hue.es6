@@ -69,7 +69,6 @@ module.exports = class PhilipsHue extends events.EventEmitter{
   auth(bridge){
     debug(`auth bridge: ${bridge}`);
     var username = this.generateUserName();
-    console.log(username);
     return axios({
       method: "post",
       url: `http://${bridge}/api`,

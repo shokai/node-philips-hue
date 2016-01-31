@@ -18,7 +18,7 @@
     "no-loop-func": 0,
     "curly": 0,
     "no-constant-condition": 1,
-    "no-console": 0,
+    "no-console": 1,
     "if-in-test/if": [1, {"directory": "test"}]
   }
 }
