@@ -55,7 +55,7 @@ Usage:
 
   parser.on('lights', () => {
     hue.on('ready', () => {
-      hue.lights()
+      hue.getLights()
         .then((lights) => {
           for(let i in lights){
             let data = lights[i];
