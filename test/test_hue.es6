@@ -4,7 +4,7 @@
 
 import helper from "./test_helper";
 import {assert} from "chai";
-import Hue from "../src/philips-hue";
+import Hue from "../src/";
 const hue = new Hue;
 
 describe('method "login"', function(){
