@@ -5,7 +5,7 @@
   "private": false,
   "main": "lib/philips-hue.js",
   "scripts": {
-    "mocha": "mocha test/test_*.es6 --compilers js:babel-register",
+    "mocha": "mocha test/test_*.es6",
     "eslint": "eslint *.es6 src/*.es6 test/*.es6",
     "test": "npm run eslint && npm run mocha",
     "build": "babel src/ --out-dir lib/ --source-maps inline",
