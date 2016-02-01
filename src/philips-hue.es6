@@ -4,10 +4,9 @@ import events from "events";
 import fs from "fs";
 import crypto from "crypto";
 import axios from "axios";
-import Light from "./light";
 const debug = require("debug")("philips-hue");
 
-module.exports = class PhilipsHue extends events.EventEmitter{
+export default class PhilipsHue extends events.EventEmitter{
 
   constructor(){
     super();
@@ -91,7 +90,4 @@ module.exports = class PhilipsHue extends events.EventEmitter{
       });
   }
 
-  light(num){
-    return new Light(num, this)
-  }
 }

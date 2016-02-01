@@ -1,9 +1,15 @@
 "use strict";
 
+export default {
+  light: function(num){
+    return new Light(num, this);
+  }
+};
+
 import axios from "axios";
 const debug = require("debug")("philips-hue:light");
 
-module.exports = class Light{
+class Light{
 
   constructor(number = 0, hue){
     this.number = number;

@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "Philips Hue bridge API wrapper",
   "private": false,
-  "main": "lib/philips-hue.js",
+  "main": "lib/index.js",
   "scripts": {
     "mocha": "mocha test/test_*.es6 --compilers js:babel-register",
     "eslint": "eslint *.es6 src/*.es6 test/*.es6",
