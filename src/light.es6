@@ -1,9 +1,9 @@
 "use strict";
 
-export default {
-  light: function(num){
+import Hue from "./philips-hue";
+
+Hue.prototype.light = function(num){
     return new Light(num, this);
-  }
 };
 
 import axios from "axios";
