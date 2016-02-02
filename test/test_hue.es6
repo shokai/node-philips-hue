@@ -2,7 +2,7 @@
 
 "use strict";
 
-import "./test_helper";
+import helper from "./test_helper";
 import {assert} from "chai";
 import Hue from "../src/philips-hue";
 const hue = new Hue;
@@ -12,7 +12,7 @@ describe('method "login"', function(){
   it('should load config file', function(){
     assert.isFunction(hue.login);
     return hue
-      .login(`${process.env.HOME}/.philips-hue.json`)
+      .login(helper.configFile)
       .then((conf) => {
         assert.match(conf.bridge, /^\d+\.\d+\.\d+\.\d+$/);
         assert.isString(conf.username);
@@ -21,7 +21,7 @@ describe('method "login"', function(){
   });
 });
 
-describe('Instance of Hue class', function(){
+describe('Hue', function(){
 
   it('should have property "bridge"', function(){
     assert.isString(hue.bridge);
@@ -74,53 +74,5 @@ describe('Instance of Hue class', function(){
     assert.isFunction(hue.light);
   });
 
-  describe('Instance of Light class', function(){
-
-    const light = hue.light(1);
-
-    it('should have method "getInfo"', function(){
-      assert.isFunction(light.getInfo);
-    });
-
-    describe('method "getInfo"', function(){
-
-      it("should return info", function(){
-        return light.getInfo().then((info) => {
-          assert.isString(info.name);
-          assert.isObject(info.state);
-          assert.isString(info.type);
-        });
-      });
-    });
-
-
-    it('should have method "setInfo"', function(){
-      assert.isFunction(light.setInfo);
-    });
-
-    it('should have method "setState"', function(){
-      assert.isFunction(light.setState);
-    });
-
-    it('should have method "off"', function(){
-      assert.isFunction(light.off);
-    });
-
-    it('should have method "on"', function(){
-      assert.isFunction(light.on);
-    });
-
-    it('should blink', function(){
-      this.timeout(4000);
-      return light
-        .off()
-        .then(() => {
-          return Promise.delay(2000);
-        })
-        .then(() => {
-          return light.on();
-        });
-    });
-  });
 
 });
