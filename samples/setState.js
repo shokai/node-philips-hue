@@ -4,10 +4,10 @@
 var Hue = require('../');
 
 var hue = new Hue;
-var conf_file = process.env.HOME+'/.philips-hue.json';
+var configFile = process.env.HOME+'/.philips-hue.json';
 
 hue
-  .login(conf_file)
+  .login(configFile)
   .then(function(conf){
     return Promise.all(
       [1, 2, 3].map(function(i){
