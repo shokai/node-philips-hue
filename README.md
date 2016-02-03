@@ -8,8 +8,8 @@ Node.js library for [Philips Hue bridge API](http://www.developers.meethue.com/p
 
 
 ## Packages
-- weather-yahoo-jp
-- weather-yahoo-jp-cli
+- philips-hue
+- philips-hue-cmd
 
 in `./packages/`
 
