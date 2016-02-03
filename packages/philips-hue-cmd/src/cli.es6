@@ -2,144 +2,102 @@
 
 "use strict";
 
-import optparse from "optparse";
+import "babel-polyfill";
+import minimist from "minimist";
 import pkg from "../package.json";
 
-const debug = require('debug')('philips-hue:app');
-
-var option = {
-  info: {},
-  state: {},
-  light: null
-};
+const debug = require('debug')('philips-hue:cli');
 
 import Hue from "philips-hue";
 const hue = new Hue;
 
-module.exports.handler = function(argv){
-  var confFile = `${process.env.HOME}/.philips-hue.json`;
+module.exports.handler = async function(_argv){
 
-  const parser = new optparse.OptionParser([
-    ['-h', '--help', 'show help'],
-    ['--lights', 'show lights state'],
-    ['--light [NUMBER]', 'specify light by Number'],
-    ['--bri [NUMBER]', 'brightness (0~255)'],
-    ['--hue [NUMBER]', 'hue (0~65535)'],
-    ['--sat [NUMBER]', 'saturation (0~255)'],
-    ['--alert [STRING]', '"none" or "lselect"'],
-    ['--effect [STRING]', '"none" or "colorloop"'],
-    ['--name [STRING]', 'set light\'s name'],
-    ['--conf [FILEPATH]', `set config file path (default - ${confFile})`]
-  ]);
+  var argv = minimist(_argv, {
+    default: {
+      config: `${process.env.HOME}/.philips-hue.json`
+    },
+    alias: {
+      'help': 'h'
+    }
+  });
 
-  parser.on('help', function(){
+  debug(argv);
 
-    parser.banner =
-`philips-hue v${pkg.version} - ${pkg.homepage}
+  const banner =
+`philips-hue v${pkg.version} - https://www.npmjs.com/package/philips-hue-cmd
 
 Usage:
-  % philips-hue --lights
+  % philips-hue lights
   % philips-hue on
   % philips-hue off
   % philips-hue on --light 1
   % philips-hue --bri 120 --hue 30000 --sat 180
   % philips-hue --bri 120 --hue 30000 --sat 180 --light 2
   % philips-hue --effect colorloop
-  % philips-hue --alert lselect`
-    console.log(parser.toString());
-    return process.exit(0);
-  });
+  % philips-hue --alert lselect
 
+options:
+  --help              show help
+  --lights            show lights state
+  --light [NUMBER]    specify light by Number
+  --bri [NUMBER]      brightness (0~255)
+  --hue [NUMBER]      hue (0~65535)
+  --sat [NUMBER]      saturation (0~255)
+  --alert [STRING]    "none" or "lselect"
+  --effect [STRING]   "none" or "colorloop"`
 
-  parser.on('conf', (opt, value) => {
-    confFile = value
-  });
-
-  parser.on('lights', () => {
-    hue.on('ready', () => {
-      hue.getLights()
-        .then((lights) => {
-          for(let i in lights){
-            let data = lights[i];
-            console.log(`[${i}] ${data.name}\t${JSON.stringify(data.state)}`);
-          }
-        })
-        .catch(function(err){
-          console.error(err.stack || err);
-        });
-    });
-  });
-
-  parser.on('light', (opt, light) => {
-    option.light = light;
-  });
-
-  ['bri', 'hue', 'sat', 'alert', 'effect'].forEach((i) => {
-    parser.on(i, (opt, value) => {
-      debug(`${i} <= ${value}`);
-      option.state[i] = value;
-    });
-  });
-
-  ['name'].forEach((i) => {
-    parser.on(i, (opt, value) => {
-      debug(`${i} <= ${value}`);
-      option.info[i] = value;
-    });
-  });
-
-  if(argv < 1){
-    parser.on_switches.help.call();
+  if(argv.help || _argv.length < 1){
+    console.log(banner);
+    return;
   }
-  parser.parse(argv);
 
-  hue.login(confFile)
-    .then((conf) => {
-      debug(hue);
-      hue.emit('ready');
-    })
-    .catch((err) => {
-      console.error(err.stack || err);
-    });;
-
-  hue.once('ready', () => {
-
-    switch(argv[0]){
-    case 'on':
-      option.state.on = true;
-      break;
-    case 'off':
-      option.state.on = false;
-      break;
+  await hue.login(argv.config);
+  if(argv._[0] === "lights"){
+    let lights = await hue.getLights();
+    for(let id in lights){
+      let light = lights[id];
+      console.log(`[${id}] ${light.name}\t${JSON.stringify(light.state)}`);
     }
+    return lights;
+  }
 
-    debug(option);
-    if(Object.keys(option.state).length < 1 &&
-       Object.keys(option.info).length < 1 &&
-       option.light){
-      return hue.light(option.light).getInfo().then(console.log).catch(console.error);
-    }
-    if(Object.keys(option.info).length > 0){
-      if(typeof option.light !== 'number'){
-        return console.error('option "--light" is required');
+  // target Lights
+  const lights = argv.light
+          ? argv.light.toString().split(",")
+          : Object.keys(await hue.getLights());
+  debug(lights);
+
+  // set state
+  const state = {};
+  for(let k of ["hue", "sat", "bri", "effect", "alert"]){
+    if(argv[k]) state[k] = argv[k];
+  }
+
+  // on-off
+  switch(argv._[0]){
+  case "on":
+    state.on = true;
+    break;
+  case "off":
+    state.on = false;
+    break;
+  }
+
+  // set state
+  debug(state);
+
+  if(Object.keys(state).length > 0){
+    return await Promise.all(
+      lights.map(id => {
+        return hue.light(id).setState(state);
+      })
+    ).then(res => {
+      for(let i of res){
+        console.log(i);
       }
-      return hue.light(option.light).setInfo(option.info).then(console.log).catch(console.error);
-    }
-    if(Object.keys(option.state).length > 0){
-      if(option.state.hue && !option.state.effect){
-        option.state.effect = 'none';
-      }
-      if(typeof option.light === 'number'){
-        return hue.light(option.light).setState(option.state).then(console.log).catch(console.error);
-      }
-      hue
-        .getLights()
-        .then((lights) => {
-          for(let number in lights){
-            hue.light(number).setState(option.state).then(console.log).catch(console.error);
-          }
-        });
-      return
-    }
-  });
+      return res;
+    });
+  }
+
 };

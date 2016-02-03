@@ -8,8 +8,9 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "babel-polyfill": "^6.3.14",
     "debug": "*",
-    "optparse": "*",
+    "minimist": "^1.2.0",
     "philips-hue": "^1.1.0"
   },
   "author": "Sho Hashimoto <hashimoto@shokai.org>",
