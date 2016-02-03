@@ -97,7 +97,10 @@ Usage:
     .then((conf) => {
       debug(hue);
       hue.emit('ready');
-    });
+    })
+    .catch((err) => {
+      console.error(err.stack || err);
+    });;
 
   hue.once('ready', () => {
 
