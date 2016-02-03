@@ -13,7 +13,7 @@ var option = {
   light: null
 };
 
-import Hue from "../";
+import Hue from "philips-hue";
 const hue = new Hue;
 
 module.exports.handler = function(argv){

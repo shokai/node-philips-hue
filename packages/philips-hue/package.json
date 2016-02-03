@@ -1,0 +1,29 @@
+{
+  "name": "philips-hue",
+  "version": "1.0.2",
+  "description": "Philips Hue bridge API wrapper",
+  "private": false,
+  "main": "lib/index.js",
+  "dependencies": {
+    "axios": "^0.9.1",
+    "debug": "*"
+  },
+  "keywords": [
+    "philips",
+    "hue",
+    "light"
+  ],
+  "author": "Sho Hashimoto <hashimoto@shokai.org>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shokai/node-philips-hue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shokai/node-philips-hue/issues"
+  },
+  "homepage": "https://github.com/shokai/node-philips-hue/tree/master/packages/philips-hue#readme",
+  "directories": {
+    "test": "test"
+  }
+}

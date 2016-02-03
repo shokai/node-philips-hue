@@ -1,35 +1,31 @@
 {
+  "private": true,
   "name": "philips-hue",
-  "version": "1.0.2",
-  "description": "Philips Hue bridge API wrapper",
-  "private": false,
-  "main": "lib/index.js",
+  "version": "1.0.0",
+  "description": "Philips Hue API",
   "scripts": {
-    "mocha": "mocha test/test_*.es6",
-    "eslint": "eslint *.es6 src/*.es6 test/*.es6",
+    "bootstrap": "./bin/run-each-packages npm i && lerna bootstrap",
+    "mocha": "mocha packages/*/*/test_*.es6 --compilers js:babel-register",
+    "eslint": "eslint packages/*/*/*.es6",
     "test": "npm run eslint && npm run mocha",
-    "build": "babel src/ --out-dir lib/ --source-maps inline",
-    "watch": "parallelshell 'npm run build -- --watch' 'chokidar \"(src|test)/*.es6\" -c \"npm test\"'"
-  },
-  "bin": {
-    "philips-hue": "./bin/cli.js"
+    "build": "./bin/run-each-packages --parallel babel src/ --out-dir lib/ --source-maps inline",
+    "watch": "parallelshell 'npm run build -- --watch' 'chokidar \"packages/*/*/*.es6\" -c \"npm test\"'"
   },
   "dependencies": {
-    "axios": "^0.9.1",
-    "debug": "*",
-    "optparse": "*"
-  },
-  "devDependencies": {
     "babel-cli": "^6.4.5",
-    "babel-eslint": "^4.1.6",
+    "babel-eslint": "^4.1.8",
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.4.3",
     "chai": "^3.5.0",
     "chokidar-cli": "^1.2.0",
     "eslint": "^1.10.3",
-    "eslint-plugin-if-in-test": "^0.1.2",
+    "lerna": "^1.1.0",
     "mocha": "^2.4.5",
     "parallelshell": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shokai/node-philips-hue.git"
   },
   "keywords": [
     "philips",
@@ -38,15 +34,8 @@
   ],
   "author": "Sho Hashimoto <hashimoto@shokai.org>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shokai/node-philips-hue.git"
-  },
   "bugs": {
     "url": "https://github.com/shokai/node-philips-hue/issues"
   },
-  "homepage": "https://github.com/shokai/node-philips-hue",
-  "directories": {
-    "test": "test"
-  }
+  "homepage": "https://github.com/shokai/node-philips-hue#readme"
 }

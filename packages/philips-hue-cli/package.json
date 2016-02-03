@@ -1,0 +1,32 @@
+{
+  "name": "philips-hue-cli",
+  "version": "1.0.2",
+  "description": "philips-hue CLI",
+  "private": false,
+  "bin": {
+    "philips-hue-cli": "bin/cli.js"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "debug": "*",
+    "optparse": "*",
+    "philips-hue": "^1.0.2"
+  },
+  "author": "Sho Hashimoto <hashimoto@shokai.org>",
+  "license": "MIT",
+  "keywords": [
+    "philips",
+    "hue",
+    "light",
+    "cli",
+    "command"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shokai/node-philips-hue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shokai/node-philips-hue/issues"
+  },
+  "homepage": "https://github.com/shokai/node-philips-hue/tree/master/packages/philips-hue-cli#readme"
+}
