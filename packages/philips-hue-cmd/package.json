@@ -1,10 +1,10 @@
 {
-  "name": "philips-hue-cli",
+  "name": "philips-hue-cmd",
   "version": "1.1.0",
   "description": "philips-hue CLI",
   "private": false,
   "bin": {
-    "philips-hue-cli": "bin/cli.js"
+    "philips-hue": "bin/cli.js"
   },
   "main": "lib/index.js",
   "dependencies": {
@@ -28,5 +28,5 @@
   "bugs": {
     "url": "https://github.com/shokai/node-philips-hue/issues"
   },
-  "homepage": "https://github.com/shokai/node-philips-hue/tree/master/packages/philips-hue-cli#readme"
+  "homepage": "https://github.com/shokai/node-philips-hue/tree/master/packages/philips-hue-cmd#readme"
 }

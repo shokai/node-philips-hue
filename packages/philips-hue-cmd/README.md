@@ -1,17 +1,17 @@
-# philips-hue-cli
+# philips-hue-cmd
 
 CLI for [Philips Hue bridge API](http://www.developers.meethue.com/philips-hue-api)
 
 
 - https://github.com/shokai/node-philips-hue
-- https://npmjs.com/package/philips-hue-cli
+- https://npmjs.com/package/philips-hue-cmd
 
 [![Circle CI](https://circleci.com/gh/shokai/node-philips-hue.svg?style=svg)](https://circleci.com/gh/shokai/node-philips-hue)
 
 
 ## Install
 
-    % npm i philips-hue-cli -g
+    % npm i philips-hue-cmd -g
 
 
 ## Usage
