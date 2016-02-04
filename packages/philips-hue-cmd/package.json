@@ -1,6 +1,6 @@
 {
   "name": "philips-hue-cmd",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "philips-hue CLI",
   "private": false,
   "bin": {
