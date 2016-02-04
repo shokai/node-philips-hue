@@ -37,7 +37,7 @@ Usage:
   % philips-hue --effect colorloop
   % philips-hue --alert lselect
 
-options:
+Options:
   --help              show help
   --light [NUMBER]    specify light by Number
   --bri [NUMBER]      brightness (0~255)
@@ -61,11 +61,6 @@ options:
     return lights;
   }
 
-  // target Lights
-  const lights = argv.light
-          ? argv.light.toString().split(",")
-          : Object.keys(await hue.getLights());
-  debug(lights);
 
   // set state
   const state = {};
@@ -83,20 +78,18 @@ options:
     break;
   }
 
-  // set state
-  debug(state);
+  debug(`state: ${JSON.stringify(state)}`);
+  if(Object.keys(state).length < 1) return;
 
-  if(Object.keys(state).length > 0){
-    return await Promise.all(
-      lights.map(id => {
-        return hue.light(id).setState(state);
-      })
-    ).then(res => {
-      for(let i of res){
-        console.log(i);
-      }
-      return res;
-    });
+  // target Lights
+  const lights = argv.light
+          ? argv.light.toString().split(",")
+          : Object.keys(await hue.getLights());
+  debug(`lights: ${lights}`);
+
+  for(let id of lights){
+    let res = await hue.light(id).setState(state);
+    console.log(res);
   }
 
 };
