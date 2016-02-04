@@ -82,12 +82,21 @@ export default class PhilipsHue extends events.EventEmitter{
     });
   }
 
+  // Bridge API request
+  request(opts){
+    const url = `http://${this.bridge}/api/${this.username}`;
+    return axios({
+      url: `${url}${opts.path}`,
+      method: opts.method || 'get',
+      data: opts.data ? JSON.stringify(opts.data) : null
+    }).then(res => {
+      return res.data;
+    })
+    ;
+  }
+
   getLights(){
-    return axios
-      .get(`http://${this.bridge}/api/${this.username}/lights`)
-      .then((res) => {
-        return res.data;
-      });
+    return this.request({path: "/lights"});
   }
 
 }

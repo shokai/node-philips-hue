@@ -1,13 +1,11 @@
 "use strict";
 
+const debug = require("debug")("philips-hue:light");
 import Hue from "./philips-hue";
 
 Hue.prototype.light = function(num){
-    return new Light(num, this);
+  return new Light(num, this);
 };
-
-import axios from "axios";
-const debug = require("debug")("philips-hue:light");
 
 class Light{
 
@@ -17,35 +15,25 @@ class Light{
   }
 
   getInfo(){
-    const url = `http://${this.hue.bridge}/api/${this.hue.username}/lights/${this.number}`;
-    debug(`getInfo ${url}`);
-    return axios.get(url)
-      .then((res) => {
-        return res.data;
-      });
+    debug(`light(${this.number}) getInfo`);
+    return this.hue.request({path: `/lights/${this.number}`});
   }
 
   setInfo(put_data){
-    const url = `http://${this.hue.bridge}/api/${this.hue.username}/lights/${this.number}`;
-    debug(`setInfo ${url} ${JSON.stringify(put_data)}`);
-    return axios({
+    debug(`light(${this.number}) setInfo ${JSON.stringify(put_data)}`);
+    return this.hue.request({
+      path: `/lights/${this.number}`,
       method: "put",
-      url: url,
-      data: JSON.stringify(put_data)
-    }).then((res) => {
-      return res.data;
+      data: put_data
     });
   }
 
   setState(put_data){
-    const url = `http://${this.hue.bridge}/api/${this.hue.username}/lights/${this.number}/state`;
-    debug(`setState ${url} ${JSON.stringify(put_data)}`);
-    return axios({
-      method: 'put',
-      url: url,
-      data: JSON.stringify(put_data)
-    }).then((res) => {
-      return res.data;
+    debug(`light(${this.number}) setState ${JSON.stringify(put_data)}`);
+    return this.hue.request({
+      path: `/lights/${this.number}/state`,
+      method: "put",
+      data: put_data
     });
   }
 
