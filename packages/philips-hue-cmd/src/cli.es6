@@ -14,6 +14,7 @@ const hue = new Hue;
 module.exports.handler = async function(_argv){
 
   var argv = minimist(_argv, {
+    boolean: [ 'help' ],
     default: {
       config: `${process.env.HOME}/.philips-hue.json`
     },
