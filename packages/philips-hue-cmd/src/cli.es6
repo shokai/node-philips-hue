@@ -39,7 +39,6 @@ Usage:
 
 options:
   --help              show help
-  --lights            show lights state
   --light [NUMBER]    specify light by Number
   --bri [NUMBER]      brightness (0~255)
   --hue [NUMBER]      hue (0~65535)
