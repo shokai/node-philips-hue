@@ -28,23 +28,22 @@ module.exports.handler = async function(_argv){
 `philips-hue v${pkg.version} - https://www.npmjs.com/package/philips-hue-cmd
 
 Usage:
-  % philips-hue lights
-  % philips-hue on
-  % philips-hue off
-  % philips-hue on --light 1
+  % philips-hue lights            # get Lights
+  % philips-hue on                # turn on all
+  % philips-hue off --light 1,2   # turn off 1,2
   % philips-hue --bri 120 --hue 30000 --sat 180
-  % philips-hue --bri 120 --hue 30000 --sat 180 --light 2
+  % philips-hue --bri 120 --hue 30000 --sat 180 --light 3
   % philips-hue --effect colorloop
   % philips-hue --alert lselect
 
 Options:
-  --help              show help
-  --light [NUMBER]    specify light by Number
-  --bri [NUMBER]      brightness (0~255)
-  --hue [NUMBER]      hue (0~65535)
-  --sat [NUMBER]      saturation (0~255)
-  --alert [STRING]    "none" or "lselect"
-  --effect [STRING]   "none" or "colorloop"`
+  --help   show help
+  --light  specify light by Number
+  --bri    brightness (0~255)
+  --hue    hue (0~65535)
+  --sat    saturation (0~255)
+  --alert  "none" or "lselect"
+  --effect "none" or "colorloop"`
 
   if(argv.help || _argv.length < 1){
     console.log(banner);
