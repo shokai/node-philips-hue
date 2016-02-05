@@ -4,6 +4,7 @@ Node.js library for [Philips Hue bridge API](http://www.developers.meethue.com/p
 
 - https://github.com/shokai/node-philips-hue
 - https://npmjs.com/package/philips-hue
+- [CLI tool](https://www.npmjs.com/package/philips-hue-cmd) is available
 
 [![Circle CI](https://circleci.com/gh/shokai/node-philips-hue.svg?style=svg)](https://circleci.com/gh/shokai/node-philips-hue)
 
