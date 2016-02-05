@@ -95,8 +95,4 @@ export default class PhilipsHue extends events.EventEmitter{
     ;
   }
 
-  getLights(){
-    return this.request({path: "/lights"});
-  }
-
 }

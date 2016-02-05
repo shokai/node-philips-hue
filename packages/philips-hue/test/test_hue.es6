@@ -55,24 +55,4 @@ describe('Hue', function(){
     assert.isFunction(hue.auth);
   });
 
-  it('should have method "getLights"', function(){
-    assert.isFunction(hue.getLights);
-  });
-
-  describe('method "getLights"', function(){
-
-    it('should return status list of lights', function(){
-      return hue
-        .getLights()
-        .then((lights) => {
-          assert.isObject(lights);
-        });
-    });
-  });
-
-  it('should have method "light"', function(){
-    assert.isFunction(hue.light);
-  });
-
-
 });

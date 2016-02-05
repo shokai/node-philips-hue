@@ -3,6 +3,10 @@
 const debug = require("debug")("philips-hue:light");
 import Hue from "./philips-hue";
 
+Hue.prototype.getLights = function(){
+  return this.request({path: "/lights"});
+};
+
 Hue.prototype.light = function(num){
   return new Light(num, this);
 };
