@@ -1,3 +1,5 @@
+// http://www.developers.meethue.com/documentation/lights-api
+
 "use strict";
 
 const debug = require("debug")("philips-hue:light");
