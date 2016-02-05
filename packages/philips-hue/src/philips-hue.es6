@@ -6,6 +6,8 @@ import crypto from "crypto";
 import axios from "axios";
 const debug = require("debug")("philips-hue");
 
+import {checkResponse} from "./util";
+
 export default class PhilipsHue extends events.EventEmitter{
 
   constructor(){
@@ -33,7 +35,7 @@ export default class PhilipsHue extends events.EventEmitter{
     debug(`generate config file ${confFile}`);
     return this
       .getBridges()
-      .then((bridges) => {
+      .then(bridges => {
         debug(`found bridges: ${JSON.stringify(bridges)}`);
         this.bridge = bridges[0];
         if(!(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(this.bridge))){
@@ -41,7 +43,7 @@ export default class PhilipsHue extends events.EventEmitter{
         }
         return this.auth(this.bridge);
       })
-      .then((username) => {
+      .then(username => {
         this.username = username;
         var conf = {bridge: this.bridge, username: username, devicetype: this.devicetype};
         fs.writeFileSync(confFile, JSON.stringify(conf));
@@ -60,8 +62,9 @@ export default class PhilipsHue extends events.EventEmitter{
     debug("getBridges");
     return axios
       .get("https://www.meethue.com/api/nupnp")
-      .then((res) => {
-        return res.data.map((i) => {return i.internalipaddress});
+      .then(res => {
+        checkResponse(res.data);
+        return res.data.map(i => {return i.internalipaddress});
       });
   }
 
@@ -75,9 +78,9 @@ export default class PhilipsHue extends events.EventEmitter{
         devicetype: this.devicetype,
         username: username
       })
-    }).then((res) => {
+    }).then(res => {
       debug(res.data);
-      if(res.data[0].error) throw res.data[0].error;
+      checkResponse(res.data);
       return username;
     });
   }
@@ -90,6 +93,8 @@ export default class PhilipsHue extends events.EventEmitter{
       method: opts.method || 'get',
       data: opts.data ? JSON.stringify(opts.data) : null
     }).then(res => {
+      debug(res.data);
+      checkResponse(res.data);
       return res.data;
     });
   }
