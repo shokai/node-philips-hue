@@ -91,8 +91,7 @@ export default class PhilipsHue extends events.EventEmitter{
       data: opts.data ? JSON.stringify(opts.data) : null
     }).then(res => {
       return res.data;
-    })
-    ;
+    });
   }
 
 }
