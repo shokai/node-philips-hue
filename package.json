@@ -8,6 +8,7 @@
     "mocha": "mocha packages/*/*/test_*.es6 --compilers js:babel-register",
     "eslint": "eslint packages/*/*/*.es6",
     "test": "npm run eslint && npm run mocha",
+    "clean": "rm -rf packages/*/lib",
     "build": "./bin/run-each-packages --parallel babel src/ --out-dir lib/ --source-maps inline",
     "watch": "parallelshell 'npm run build -- --watch' 'chokidar \"packages/*/*/*.es6\" -c \"npm test\"'"
   },
