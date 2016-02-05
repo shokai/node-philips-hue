@@ -88,8 +88,8 @@ Options:
   debug(`lights: ${lights}`);
 
   for(let id of lights){
-    let res = await hue.light(id).setState(state);
-    console.log(res);
+    let res = await hue.light(id).setState(state).catch(err => { console.error(err); });
+    if(res) console.log(res);
   }
 
 };
