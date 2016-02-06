@@ -21,6 +21,7 @@
     "chai": "^3.5.0",
     "chokidar-cli": "^1.2.0",
     "eslint": "^1.10.3",
+    "eslint-plugin-if-in-test": "^0.2.0",
     "lerna": "^1.1.0",
     "mocha": "^2.4.5",
     "parallelshell": "^2.0.0"
