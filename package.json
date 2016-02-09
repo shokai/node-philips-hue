@@ -4,12 +4,12 @@
   "version": "1.0.0",
   "description": "Philips Hue API",
   "scripts": {
-    "bootstrap": "./bin/run-each-packages npm i && lerna bootstrap",
+    "bootstrap": "lerna-run npm i && lerna bootstrap",
     "mocha": "mocha packages/*/*/test_*.es6 --compilers js:babel-register",
     "eslint": "eslint packages/*/*/*.es6",
     "test": "npm run eslint && npm run mocha",
     "clean": "rm -rf packages/*/lib",
-    "build": "./bin/run-each-packages --parallel babel src/ --out-dir lib/ --source-maps inline",
+    "build": "lerna-run --parallel babel src/ --out-dir lib/ --source-maps inline",
     "watch": "parallelshell 'npm run build -- --watch' 'chokidar \"packages/*/*/*.es6\" -c \"npm test\"'"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "eslint": "^1.10.3",
     "eslint-plugin-if-in-test": "^0.2.0",
     "lerna": "^1.1.0",
+    "lerna-run": "^0.0.2",
     "mocha": "^2.4.5",
     "parallelshell": "^2.0.0"
   },
