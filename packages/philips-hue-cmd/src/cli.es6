@@ -29,7 +29,8 @@ module.exports.handler = async function(_argv){
 `philips-hue v${pkg.version} - https://www.npmjs.com/package/philips-hue-cmd
 
 Usage:
-  % philips-hue lights            # get Lights
+  % philips-hue lights            # list Lights
+  % philips-hue bridges           # list Bridges
   % philips-hue on                # turn on all
   % philips-hue off --light 1,2   # turn off 1,2
   % philips-hue --bri 120 --hue 30000 --sat 180
@@ -52,13 +53,20 @@ Options:
   }
 
   await hue.login(argv.config);
-  if(argv._[0] === "lights"){
+  switch(argv._[0]){
+  case "lights":
     let lights = await hue.getLights();
     for(let id in lights){
       let light = lights[id];
       console.log(`[${id}] ${light.name}\t${JSON.stringify(light.state)}`);
     }
     return lights;
+  case "bridges":
+    let bridges = await hue.getBridges();
+    for(let bridge of bridges){
+      console.log(bridge);
+    }
+    return bridges;
   }
 
 
