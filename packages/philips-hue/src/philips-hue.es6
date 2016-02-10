@@ -37,7 +37,7 @@ export default class PhilipsHue extends events.EventEmitter{
       .getBridges()
       .then(bridges => {
         debug(`found bridges: ${JSON.stringify(bridges)}`);
-        this.bridge = bridges[0];
+        this.bridge = bridges[0].internalipaddress;
         if(!(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(this.bridge))){
           throw `invalid bridge address "${this.bridge}"`;
         }
@@ -64,7 +64,7 @@ export default class PhilipsHue extends events.EventEmitter{
       .get("https://www.meethue.com/api/nupnp")
       .then(res => {
         checkResponse(res.data);
-        return res.data.map(i => {return i.internalipaddress});
+        return res.data;
       });
   }
 
