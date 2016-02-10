@@ -10,7 +10,7 @@
     "test": "npm run eslint && npm run mocha",
     "clean": "rm -rf packages/*/lib",
     "build": "lerna-run --parallel babel src/ --out-dir lib/ --source-maps inline",
-    "watch": "parallelshell 'npm run build -- --watch' 'chokidar \"packages/*/*/*.es6\" -c \"npm test\"'"
+    "watch": "parallelshell 'npm run build -- --watch' 'chokidar \"packages/*/*/*.es6\" -c \"npm run eslint\"'"
   },
   "dependencies": {
     "babel-cli": "^6.4.5",
