@@ -83,7 +83,7 @@ hue
 
 ```javascript
 hue.getLights()
-  .then(lights){
+  .then(function(lights){
     console.log(lights);
     console.log(Object.keys(lights) + " lights found!");
   })
