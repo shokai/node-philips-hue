@@ -1,5 +1,3 @@
-"use strict";
-
 export function checkResponse(res){
   if(res instanceof Array){
     for(let i of res){

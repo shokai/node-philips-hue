@@ -1,7 +1,5 @@
 /* global describe it */
 
-"use strict";
-
 process.env.NODE_ENV = "test";
 
 import {assert} from "chai";

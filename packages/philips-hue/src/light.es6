@@ -1,5 +1,3 @@
-"use strict";
-
 const debug = require("debug")("philips-hue:light");
 import Hue from "./philips-hue";
 

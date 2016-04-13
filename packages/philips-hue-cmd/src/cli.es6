@@ -1,7 +1,5 @@
 /* eslint no-console: 0 */
 
-"use strict";
-
 import "babel-polyfill";
 import minimist from "minimist";
 import pkg from "../package.json";

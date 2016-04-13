@@ -1,7 +1,5 @@
 /* global describe it */
 
-"use strict";
-
 import helper from "./test_helper";
 import {assert} from "chai";
 import Hue from "../src/";
