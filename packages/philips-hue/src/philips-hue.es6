@@ -49,13 +49,6 @@ export default class PhilipsHue extends events.EventEmitter{
       });
   }
 
-  generateUserName(){
-    return crypto
-      .createHash('md5')
-      .update(`${this.devicetype} ${process.env.USER} ${Date.now()}`)
-      .digest("hex");
-  }
-
   getBridges(){
     debug("getBridges");
     return axios
@@ -68,18 +61,16 @@ export default class PhilipsHue extends events.EventEmitter{
 
   auth(bridge){
     debug(`auth bridge: ${bridge}`);
-    var username = this.generateUserName();
     return axios({
       method: "post",
       url: `http://${bridge}/api`,
       data: JSON.stringify({
-        devicetype: this.devicetype,
-        username: username
+        devicetype: this.devicetype
       })
     }).then(res => {
       debug(res.data);
       checkResponse(res.data);
-      return username;
+      return res.data[0].success.username;
     });
   }
 
