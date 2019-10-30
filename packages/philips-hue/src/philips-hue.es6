@@ -52,7 +52,7 @@ export default class PhilipsHue extends events.EventEmitter{
   getBridges(){
     debug("getBridges");
     return axios
-      .get("https://www.meethue.com/api/nupnp")
+      .get("https://discovery.meethue.com")
       .then(res => {
         checkResponse(res.data);
         return res.data.map(i => {return i.internalipaddress});
